@@ -4,8 +4,8 @@ import pytest
 
 duckdb = pytest.importorskip("duckdb")
 
-from inmet_pipeline.carga import carregar_arquivo, conectar  # noqa: E402
-from inmet_pipeline.parser import ler_csv_inmet  # noqa: E402
+from inmet_pipeline.carga import carregar_arquivo, conectar
+from inmet_pipeline.parser import ler_csv_inmet
 
 FIXTURES = Path(__file__).parent / "fixtures"
 PORTO_ALEGRE = FIXTURES / "INMET_S_RS_A801_PORTO ALEGRE_01-01-2024_A_31-12-2024.CSV"

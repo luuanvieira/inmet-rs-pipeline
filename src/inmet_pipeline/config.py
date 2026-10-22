@@ -17,7 +17,7 @@ class Config:
     uf: str
 
     @classmethod
-    def from_env(cls) -> "Config":
+    def from_env(cls) -> Config:
         return cls(
             url_base=os.getenv(
                 "INMET_URL_BASE",
