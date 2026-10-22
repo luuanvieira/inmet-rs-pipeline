@@ -1,0 +1,9 @@
+inmet_rs:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      # Mesmo arquivo usado pela ingestão. Caminho relativo à pasta dbt/.
+      path: "{{ env_var('INMET_DB_PATH', '../data/warehouse/inmet.duckdb') }}"
+      schema: main
+      threads: 4

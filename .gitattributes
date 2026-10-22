@@ -1,0 +1,2 @@
+# Os dados de exemplo imitam os arquivos do INMET (latin-1, CRLF): o Git não deve converter.
+tests/fixtures/*.CSV binary

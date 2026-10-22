@@ -1,0 +1,37 @@
+name: inmet_rs
+version: "0.1.0"
+config-version: 2
+profile: inmet_rs
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # INMET publica em UTC; o RS não tem horário de verão desde 2019.
+  # Ver a seção "Decisões e limitações" do README.
+  offset_utc_horas: -3
+  # Um dia só tem total de chuva calculado se tiver pelo menos esta quantidade de horas válidas.
+  min_horas_validas_dia: 18
+  # Um mês é considerado completo com pelo menos esta quantidade de dias válidos.
+  min_dias_validos_mes: 25
+  # Limiar de chuva diária para considerar o dia um evento extremo (mm).
+  limiar_chuva_extrema_mm: 50
+  # Limites físicos plausíveis; fora deles o valor é descartado na camada silver.
+  limites:
+    temperatura_c: [-15, 50]
+    umidade_pct: [0, 100]
+    pressao_mb: [850, 1100]
+    precipitacao_mm: [0, 150]
+    vento_ms: [0, 60]
+
+models:
+  inmet_rs:
+    staging:
+      +schema: silver
+      +materialized: view
+    marts:
+      +schema: gold
+      +materialized: table

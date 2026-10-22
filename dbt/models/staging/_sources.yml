@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: Dados carregados pela ingestão Python, tipados mas sem regras de negócio.
+    schema: bronze
+    tables:
+      - name: estacoes
+        description: Metadados de cada estação automática (uma linha por estação).
+        columns:
+          - name: codigo_estacao
+            data_tests: [not_null, unique]
+      - name: observacoes_horarias
+        description: Uma linha por estação e hora (UTC), como publicado pelo INMET.
+        columns:
+          - name: codigo_estacao
+            data_tests: [not_null]
+          - name: ts_utc
+            data_tests: [not_null]

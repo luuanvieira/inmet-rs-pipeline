@@ -1,0 +1,22 @@
+services:
+  # Executa o pipeline completo (download -> bronze -> dbt) e termina.
+  pipeline:
+    build: .
+    command: make pipeline ANOS="${ANOS:-2020 2021 2022 2023 2024 2025 2026}"
+    environment:
+      INMET_DB_PATH: /app/data/warehouse/inmet.duckdb
+    volumes:
+      - ./data:/app/data
+
+  # Dashboard lendo o mesmo banco, em http://localhost:8501
+  dashboard:
+    build: .
+    environment:
+      INMET_DB_PATH: /app/data/warehouse/inmet.duckdb
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8501:8501"
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully

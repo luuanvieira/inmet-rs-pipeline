@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_estacoes
+    description: Estações automáticas da UF carregada.
+    columns:
+      - name: codigo_estacao
+        description: Código WMO da estação (ex. A801 = Porto Alegre).
+        data_tests: [not_null, unique]
+
+  - name: stg_observacoes_horarias
+    description: >
+      Observações horárias deduplicadas, com horário local e valores fora dos limites
+      físicos (vars.limites) substituídos por NULL.
+    columns:
+      - name: codigo_estacao
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_estacoes')
+              field: codigo_estacao
+      - name: ts_utc
+        data_tests: [not_null]
+      - name: data_local
+        data_tests: [not_null]
+      - name: teve_valor_descartado
+        description: Indica que ao menos uma medida da hora estava fora da faixa plausível.

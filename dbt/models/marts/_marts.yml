@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim_estacoes
+    description: Estações com localização e cobertura dos dados (quanto do período tem chuva válida).
+    columns:
+      - name: codigo_estacao
+        data_tests: [not_null, unique]
+      - name: pct_dias_chuva_validos
+        description: Percentual de dias com horas suficientes para calcular a chuva do dia.
+
+  - name: fct_clima_diario
+    description: Resumo diário por estação (chuva, temperatura, umidade, vento).
+    columns:
+      - name: codigo_estacao
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_estacoes')
+              field: codigo_estacao
+      - name: data_local
+        data_tests: [not_null]
+      - name: chuva_mm
+        description: NULL quando o dia tem menos horas válidas que vars.min_horas_validas_dia.
+      - name: chuva_acumulada_5d_mm
+        description: Soma da chuva do dia e dos 4 dias anteriores.
+
+  - name: fct_clima_mensal
+    description: Resumo mensal por estação, com média histórica e anomalia de chuva.
+    columns:
+      - name: mes
+        data_tests: [not_null]
+      - name: anomalia_chuva_pct
+        description: Quanto o mês choveu acima (+) ou abaixo (-) da média da estação para aquele mês.
+
+  - name: fct_eventos_chuva_extrema
+    description: Dias com chuva maior ou igual a vars.limiar_chuva_extrema_mm.
+    columns:
+      - name: chuva_mm
+        data_tests: [not_null]
